@@ -1,4 +1,5 @@
 from tkinter import *
+import pandas as pd
 
 # Create Window
 root = Tk(className = "Skin Cancer Model")
@@ -9,7 +10,8 @@ title.grid(row=0, column=1)
 
 # Patient Age
 Label(root, text="Patient Age:").grid(row=1, column=0, sticky="w")
-age = Entry(root).grid(row=1, column=1, sticky="w")
+age = IntVar(value=1)
+Spinbox(root, from_=1, to=100, textvariable=age).grid(row=1, column=1, sticky="w")
 
 # Patient Sex
 Label(root, text="Patient Sex:").grid(row=2, column=0, sticky="w")
@@ -41,7 +43,16 @@ output = Message(root).grid(row=9, column=1, columnspan=2)
 
 # ----Insert Run Function Here----
 def run():
-    print("Button Press")
+    print(age.get())
+    print(sex.get())
+    print(localization.get())
+    test = pd.DataFrame({
+        "age":  [age.get],
+        "sex":  [sex.get()],
+        "localization": [localization.get()]
+    })
+
+    print(test)
 
 # Submit Button
 Button(root, text="Submit", command=run).grid(row=9, column=0)

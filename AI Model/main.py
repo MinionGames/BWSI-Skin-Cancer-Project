@@ -41,6 +41,7 @@ print("Model Accuracy: ", sk.metrics.accuracy_score(y_test, predictions))
 
 """-----USER INTERFACE-----"""
 from tkinter import *
+from tkinter import messagebox
 
 # Create Window
 root = Tk(className = "Skin Cancer Model")
@@ -51,7 +52,8 @@ title.grid(row=0, column=1)
 
 # Patient Age
 Label(root, text="Patient Age:").grid(row=1, column=0, sticky="w")
-age = Entry(root).grid(row=1, column=1, sticky="w")
+age = IntVar(value=1)
+Spinbox(root, from_=1, to=100, textvariable=age).grid(row=1, column=1, sticky="w")
 
 # Patient Sex
 Label(root, text="Patient Sex:").grid(row=2, column=0, sticky="w")
@@ -81,9 +83,34 @@ Radiobutton(root, text="Upper Extremity", variable=localization, value=14).grid(
 # Output Message
 output = Message(root).grid(row=9, column=1, columnspan=2)
 
-# ----Insert Run Function Here----
+# ----RUN FUNCTION----
 def run():
-    pass
+    test = pd.DataFrame({
+        "age":  [age.get()],
+        "sex":  [sex.get()],
+        "localization": [localization.get()]
+    })
+
+    result = xgb.predict(test)
+
+    output = "An error occurred"
+
+    if (result[0] == 0):
+        output = "Actinic keratoses and intraepithelial carcinoma / Bowen's disease"
+    elif (result[0] == 1):
+        output = "Basal cell carcinoma"
+    elif (result[0] == 2):
+        output = "Benign keratosis-like lesions"
+    elif (result[0] == 3):
+        output = "Dermatofibroma"
+    elif (result[0] == 4):
+        output = "Melanoma"
+    elif (result[0] == 5):
+        output = "Melanocytic nevi"
+    elif (result[0] == 6):
+        output = "Vascular lesions"
+
+    messagebox.showinfo("Results", f"The model predicts that you most likely have: {output}")
 
 # Submit Button
 Button(root, text="Submit", command=run).grid(row=9, column=0)
