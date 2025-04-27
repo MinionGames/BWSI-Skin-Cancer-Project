@@ -47,7 +47,7 @@ def run():
     print(sex.get())
     print(localization.get())
     test = pd.DataFrame({
-        "age":  [age.get],
+        "age":  [age.get()],
         "sex":  [sex.get()],
         "localization": [localization.get()]
     })
